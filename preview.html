@@ -414,7 +414,8 @@
                  border-color:<%=btn.borderColor %>;border-style:<%=btn.borderStyle %>;border-width: <%=btn.borderWidth %>;border-radius: <%=btn.borderRadius %> ;
                  box-shadow:<%=btn.boxShadow %> ; text-shadow:<%=btn.textShadow %> ; color:  <%=btn.color %>;font-style: <%=btn.fontStyle %>; font-weight: <%=btn.fontWeight %>;
                  font-family: <%=btn.fontFamily %>; font-size: <%=btn.fontSize %>;  text-align: <%=btn.textAlign%>; line-height:<%=btn.lineHeight%>;"
-                            class="W_btn W_item" data-dataurl="<%=btn.dataurl %>" data-datamapping="<%=btn.datamapping %>">
+                            class="W_btn W_item" data-dataurl="<%=btn.dataurl %>"
+                            data-datamapping="<%=btn.datamapping %>">
                         <%= btn.context %>
                     </button>
                 </div>
@@ -432,13 +433,147 @@
 <script src="/js/template-native.js"></script>
 <script src="/js/preview.js"></script>
 <script>
+    var pageData = [];
+    //根据 url 的名字 获得 值
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)return unescape(r[2]);
+        return null;
+    }
+    var projectId = getQueryString('projectId') || '558ce40c5ae7cc6d10d94605';
+    $.getJSON('http://192.168.8.166:9898/preview/jsonp?projectId=' + projectId + '&callback=?',
+            function (data) {
+                pageData = data;
+                var html = template('test', {allPage: data});
+                $('#touchBoxCt').html(html);
+            });
+</script>
+
+<script>
+
+    var touchStyleLoadingEl = document.getElementById('touchStyleLoading');
+    touchStyleLoadingEl.style.opacity = '0';
+    var curimgdata = [], curtextdata = [], curbtndata = [];
+
+    setTimeout(function () {
+        touchStyleLoadingEl.parentNode.removeChild(touchStyleLoadingEl);
+    }, 5e2);
+    setTimeout(initTouchStyleApp, 250);
+
+    function initTouchStyleApp() {
+        var len = pageData.length;
+        var boxer = new TouchBox('#touchBoxCt', {
+            loop: false,//len >= 3 ? true: false,
+            animation: 'slide'
+        });
+        boxer.on('slide', function (activeIndex, oldIndex) {
+            if (len - 1 === activeIndex) {
+                $('.touchstyle-arrowup').hide();
+            } else {
+                $('.touchstyle-arrowup').show();
+            }
+            resetDomClass(activeIndex, true);
+        });
+
+        boxer.on('beforeslide', function (toIndex) {
+            curimgdata = [], curtextdata = [], curbtndata = [];
+            resetDomClass(toIndex, false);
+        });
+        window.boxer = boxer;
+    }
+
+    function resetDomClass(index, isSet) {
+        var curpagechild = $('#touchBoxCt').children().eq(index).children();
+        $.each(curpagechild, function (index, item) {
+            var curitem = $(item);
+            var type = curitem.data('type');
+            switch (type) {
+                case 'img':
+                    var id = curitem.attr('id');
+                    if (isSet) {
+                        $.each(curimgdata, function (i, imgdata) {
+                            if (imgdata.id == id) {
+                                curitem.attr('class', imgdata.classnames);
+                            }
+                        })
+                    } else {
+                        var classnames = curitem.attr('class');
+                        curimgdata.push({id: id, classnames: classnames});
+                    }
+                    break;
+                case 'text':
+                    var id = curitem.attr('id');
+                    if (isSet) {
+                        $.each(curtextdata, function (i, textdata) {
+                            if (textdata.id == id) {
+                                curitem.attr('class', textdata.classnames);
+                            }
+                        })
+                    } else {
+                        var classnames = curitem.attr('class');
+                        curtextdata.push({id: id, classnames: classnames});
+                    }
+                    break;
+
+                case 'btn':
+                    var id = curitem.attr('id');
+                    if (isSet) {
+                        $.each(curbtndata, function (i, btndata) {
+                            if (btndata.id == id) {
+                                curitem.attr('class', btndata.classnames);
+                            }
+                        })
+                    } else {
+                        var classnames = curitem.attr('class');
+                        curbtndata.push({id: id, classnames: classnames});
+                    }
+                    break;
+            }
+            if (isSet) {
+                curitem.show();
+            } else {
+                curitem.attr('class', '');
+                curitem.hide();
+            }
+
+        })
+
+    }
 
 
-$.getJSON("http://192.168.8.166:9898/preview/jsonp?projectId=558ce40c5ae7cc6d10d94605&callback=?",
-  function(data) {
-      var html = template('test', {allPage:data});
-      $('#touchBoxCt').html(html);
-  });
+    function initDataSource() {
+        var $witem = $('.W_item');
+
+        $.each($witem, function (index, item) {
+            var $item = $(item);
+            var dataurl = $item.data('dataurl');
+            var datamap = $item.data('datamapping');
+            if (dataurl != "" && datamap != "") {
+                $.ajax({
+                    url: dataurl,
+                    method: "GET",
+                    cache: false,
+                    dataType: "json"
+                }).done(function (msg) {
+                    if ($item.get(0).nodeName.toLocaleLowerCase() == 'img') {
+                        $item.attr('src', eval(datamap));
+                    } else {
+                        $item.text(eval(datamap));
+                    }
+                }).fail(function (jqXHR, textStatus) {
+
+                });
+
+
+            }
+
+
+        })
+    }
+
+    initDataSource();
+
 </script>
 
 </body>
