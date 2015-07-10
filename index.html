@@ -446,9 +446,11 @@
     var projectId = getQueryString('projectId') || '559f3309413615507d1180a5';
     $.getJSON('http://120.132.50.71/wxms/preview/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
-                pageData = data;
-                var html = template('test', {allPage: data});
-                $('#touchBoxCt').html(html);
+                if (data.success) {
+                    pageData = data.model;
+                    var html = template('test', {allPage: data});
+                    $('#touchBoxCt').html(html);
+                }
             });
 </script>
 <script src="./js/wechat.js"></script>
@@ -576,9 +578,9 @@
 
     initDataSource();
 
-    setTimeout(function(){
+    setTimeout(function () {
         foo.init();
-    },1000);
+    }, 1000);
 
 
 </script>
