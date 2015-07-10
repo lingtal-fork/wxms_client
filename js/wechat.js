@@ -135,7 +135,7 @@ foo.renderUI = function () {
 
 foo.share = function () {
     $.ajax({
-        url: 'http://m.yhd.com/hot/sogift/shareGameWithoutUt.action',
+        url: 'http://120.132.50.71/wxms/??',
         type: 'get',
         dataType: 'json',
         data: {

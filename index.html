@@ -444,7 +444,7 @@
         return null;
     }
     var projectId = getQueryString('projectId') || '558ce40c5ae7cc6d10d94605';
-    $.getJSON('http://192.168.8.166:9898/preview/jsonp?projectId=' + projectId + '&callback=?',
+    $.getJSON('http://120.132.50.71/wxms/preview/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
                 pageData = data;
                 var html = template('test', {allPage: data});
