@@ -134,18 +134,16 @@ foo.renderUI = function () {
 };
 
 foo.share = function () {
-    $.ajax({
-        url: 'http://120.132.50.71/wxms/??',
-        type: 'get',
-        dataType: 'json',
-        data: {
-            projectId: projectId
-        },
-        success: function (json) {
-            //alert(json.data.sharePic);
-            var title = json.data.shareTitle||'微信分享',
-                text = json.data.shareDesc||'微信分享',
-                picture = json.data.sharePic||'http://d9.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png';
+    $.getJSON('http://120.132.50.71/wxms/getWeiXinShareByProjectId?projectId=' + projectId + '&callback=?',
+        function (data) {
+            var json = {};
+            if (data.length > 0) {
+                json = data[0];
+            }
+
+            var title = json.title || '微信分享',
+                text = json.desc || '微信分享',
+                picture = json.imgUrl || 'http://d9.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png';
             foo.shareJson = {
                 "title": title,
                 "text": text,
@@ -166,7 +164,6 @@ foo.share = function () {
                 imgUrl: foo.shareJson.picture,
                 desc: foo.shareJson.text
             });
-        }
-    });
+        });
 
 };
