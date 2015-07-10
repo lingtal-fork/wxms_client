@@ -443,12 +443,12 @@
         if (r != null)return unescape(r[2]);
         return null;
     }
-    var projectId = getQueryString('projectId') || '559f3309413615507d1180a5';
+    var projectId = getQueryString('projectId') || '559f367d369040a51b6d1e62';
     $.getJSON('http://120.132.50.71/wxms/preview/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
                 if (data.success) {
                     pageData = data.model;
-                    var html = template('test', {allPage: data});
+                    var html = template('test', {allPage: pageData});
                     $('#touchBoxCt').html(html);
                 }
             });
