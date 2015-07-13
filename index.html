@@ -443,7 +443,7 @@
         if (r != null)return unescape(r[2]);
         return null;
     }
-    var projectId = getQueryString('projectId') || '559f367d369040a51b6d1e62';
+    var projectId = getQueryString('projectId') || '559f57c90c000eee22663be0';
     $.getJSON('http://120.132.50.71/wxms/show/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
                 if (data.success) {
