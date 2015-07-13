@@ -373,7 +373,7 @@
              style="background-color:<%= page.backgroundcolor %>; background-image:url(<%=page.backgroundimage%>); background-size: cover; background-position: 50% 50%;">
             <% page.imgcomList.forEach(function(img){ %>
             <div id="<%=img._id %>" class="<%=img.animationName %> animated" data-type="img" style="position: absolute;
-            z-index: <%=img.zIndex %>;left: <%=img.left %>; right: <%=img.right %>; top: <%=img.top %>; bottom: <%=img.bottom %>;
+            z-index: <%=img.zIndex %>;left: <%=sizeFormat(img.left,allPage.initWidth)%>; right: <%=sizeFormat(img.right,allPage.initWidth) %>; top: <%=sizeFormat(img.top,allPage.initHeight) %>; bottom: <%=sizeFormat(img.bottom,allPage.initHeight) %>;
             width: <%=sizeFormat(img.width,allPage.initWidth) %>; height: <%=sizeFormat(img.height,allPage.initHeight)%>;
             -webkit-animation-duration: <%=img.animationDuration %>; animation-duration: <%=img.animationDuration %>; -webkit-animation-iteration-count: <%=img.animationCount %>;
             animation-iteration-count: <%=img.animationCount %>; animation-delay:<%=img.animationDelay %>; -webkit-animation-delay:<%=img.animationDelay %>;  background-repeat: no-repeat;">
@@ -390,7 +390,7 @@
             <div id="<%=txt._id %>" class="<%=txt.animationName%> animated" data-type="text"
                  style="position: absolute; display: table; width: <%=sizeFormat(txt.width,allPage.initWidth) %>; height: <%=sizeFormat(txt.height,allPage.initHeight) %>; font-style: <%=txt.fontStyle %>; font-weight: <%=txt.fontWeight %>; font-family: <%=txt.fontFamily %>;
              font-size: <%=txt.fontSize %>; color:  <%=txt.color %>; text-align: <%=txt.textAlign%>; line-height:<%=txt.lineHeight%>;
-             z-index: <%=txt.zIndex %>;left: <%=txt.left %>; right: <%=txt.right %>; top: <%=txt.top %>; bottom: <%=txt.bottom %>; opacity: <%=txt.opacity %>;
+             z-index: <%=txt.zIndex %>;left: <%=sizeFormat(txt.left,allPage.initWidth) %>; right: <%=sizeFormat(txt.right,allPage.initWidth) %>; top: <%=sizeFormat(txt.top,allPage.initHeight) %>; bottom: <%=sizeFormat(txt.bottom,allPage.initHeight) %>; opacity: <%=txt.opacity %>;
              -webkit-animation-duration: <%=txt.animationDuration %>; animation-duration: <%=txt.animationDuration %>; -webkit-animation-iteration-count: <%=txt.animationCount %>;
             animation-iteration-count: <%=txt.animationCount %>; animation-delay:<%=txt.animationDelay %>; -webkit-animation-delay:<%=txt.animationDelay %>;
             transform:<%=txt.transform %>;-webkit-transform:<%=txt.transform %>;">
@@ -407,7 +407,7 @@
             <% }) %>
             <% page.btncomtList.forEach(function(btn){ %>
             <div id="<%= btn._id %>" class="W_item <%=btn.animationName%> animated" data-type="btn"
-                 style="position: absolute;width: <%=sizeFormat(btn.width,allPage.initWidth) %>; height: <%=sizeFormat(btn.height,allPage.initHeight) %>;z-index: <%=btn.zIndex %>;left: <%=btn.left %>; right: <%=btn.right %>; top: <%=btn.top %>; bottom: <%=btn.bottom %>;
+                 style="position: absolute;width: <%=sizeFormat(btn.width,allPage.initWidth) %>; height: <%=sizeFormat(btn.height,allPage.initHeight) %>;z-index: <%=btn.zIndex %>;left: <%=sizeFormat(btn.left,allPage.initWidth) %>; right: <%=sizeFormat(btn.right,allPage.initWidth) %>; top: <%=sizeFormat(btn.top,allPage.initHeight) %>; bottom: <%=sizeFormat(btn.bottom,allPage.initHeight) %>;
              -webkit-animation-duration: <%=btn.animationDuration %>; animation-duration: <%=btn.animationDuration %>; -webkit-animation-iteration-count: <%=btn.animationCount %>;
             animation-iteration-count: <%=btn.animationCount %>; animation-delay:<%=btn.animationDelay %>; -webkit-animation-delay:<%=btn.animationDelay %>; background-repeat: no-repeat;">
                 <div class="item-table">
@@ -467,7 +467,7 @@
         var len = pageData.length;
         if(len>0){
             pageData.initWidth = 320;
-            pageData.initHeight = 320;
+            pageData.initHeight = 504;
 
             template.helper('sizeFormat', function (oldSize,size) {
                 return (parseInt(oldSize,10)/size)*100+'%';
