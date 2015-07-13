@@ -137,8 +137,8 @@ foo.share = function () {
     $.getJSON('http://120.132.50.71/wxms/getWeiXinShareByProjectId?projectId=' + projectId + '&callback=?',
         function (data) {
             var json = {};
-            if (data.length > 0) {
-                json = data[0];
+            if (data.model.length > 0) {
+                json = data.model[0];
             }
 
             var title = json.title || '微信分享',
