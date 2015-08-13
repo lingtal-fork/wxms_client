@@ -372,14 +372,14 @@
         <div id="<%= page._id %>" class="page"
              style="background-color:<%= page.backgroundcolor %>; background-image:url(<%=page.backgroundimage%>); background-size: cover; background-position: 50% 50%;">
             <% page.imgcomList.forEach(function(img){ %>
-            <div id="<%=img._id %>" class="<%=img.animationName %> animated" data-type="img" style="position: absolute;
+            <div id="<%=img._id %>" class="<%=img.animationName %> animated"  data-type="img" style="position: absolute;
             z-index: <%=img.zIndex %>;left: <%=sizeFormat(img.left,allPage.initWidth)%>; right: <%=sizeFormat(img.right,allPage.initWidth) %>; top: <%=sizeFormat(img.top,allPage.initHeight) %>; bottom: <%=sizeFormat(img.bottom,allPage.initHeight) %>;
             width: <%=sizeFormat(img.width,allPage.initWidth) %>; height: <%=sizeFormat(img.height,allPage.initHeight)%>;
             -webkit-animation-duration: <%=img.animationDuration %>; animation-duration: <%=img.animationDuration %>; -webkit-animation-iteration-count: <%=img.animationCount %>;
             animation-iteration-count: <%=img.animationCount %>; animation-delay:<%=img.animationDelay %>; -webkit-animation-delay:<%=img.animationDelay %>;  background-repeat: no-repeat;">
                 <div style="transform:<%=img.transform %>;-webkit-transform:<%=img.transform %>;background-color:transparent;"
                      class="item-image-full">
-                    <img class="W_item" src="<%=img.imgurl %>" data-dataurl="<%=img.dataurl %>"
+                    <img class="W_item" data-href="<%=img.href%>" src="<%=img.imgurl %>" data-dataurl="<%=img.dataurl %>"
                          data-datamapping="<%=img.datamapping %>" width="100%" height="100%"
                          style="-webkit-border-radius:<%=img.borderRadius %>;border-radius:<%=img.borderRadius %>; box-shadow:<%=img.boxShadow %>;opacity:<%=img.opacity %>;
                      border-color:<%=img.borderColor %>;border-style:<%=img.borderStyle %>;border-width: <%=img.borderWidth %>;border-radius: <%=img.borderRadius %> ;padding: <%=img.paddingTop %> <%=img.paddingRight %> <%=img.paddingBottom %> <%=img.paddingLeft %>;">
@@ -395,7 +395,7 @@
             animation-iteration-count: <%=txt.animationCount %>; animation-delay:<%=txt.animationDelay %>; -webkit-animation-delay:<%=txt.animationDelay %>;
             transform:<%=txt.transform %>;-webkit-transform:<%=txt.transform %>;">
                 <div class="item-table">
-                    <div style="display: table-cell;text-decoration:<%=txt.textDecoration %>;vertical-align:<%=txt.verticalAlign %>;color:<%=txt.color %>;
+                    <div data-href="<%=txt.href%>" style="display: table-cell;text-decoration:<%=txt.textDecoration %>;vertical-align:<%=txt.verticalAlign %>;color:<%=txt.color %>;
                     box-shadow:<%=txt.boxShadow %> ; text-shadow:<%=txt.textShadow %>;background-color:<%=txt.backgroundColor %>;
                  border-color:<%=txt.borderColor %>;border-style:<%=txt.borderStyle %>;border-width: <%=txt.borderWidth %>;border-radius: <%=txt.borderRadius %> ;"
                          class="item-table-cell W_item" data-dataurl="<%=txt.dataurl %>"
@@ -411,7 +411,7 @@
              -webkit-animation-duration: <%=btn.animationDuration %>; animation-duration: <%=btn.animationDuration %>; -webkit-animation-iteration-count: <%=btn.animationCount %>;
             animation-iteration-count: <%=btn.animationCount %>; animation-delay:<%=btn.animationDelay %>; -webkit-animation-delay:<%=btn.animationDelay %>; background-repeat: no-repeat;">
                 <div class="item-table">
-                    <button type="button" style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;background-color:<%=btn.backgroundColor %>;
+                    <button type="button"  data-href="<%=btn.href%>"  style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;background-color:<%=btn.backgroundColor %>;
                  border-color:<%=btn.borderColor %>;border-style:<%=btn.borderStyle %>;border-width: <%=btn.borderWidth %>;border-radius: <%=btn.borderRadius %> ;
                  box-shadow:<%=btn.boxShadow %> ; text-shadow:<%=btn.textShadow %> ; color:  <%=btn.color %>;font-style: <%=btn.fontStyle %>; font-weight: <%=btn.fontWeight %>;
                  font-family: <%=btn.fontFamily %>; font-size: <%=btn.fontSize %>;  text-align: <%=btn.textAlign%>; line-height:<%=btn.lineHeight%>;"
@@ -444,15 +444,26 @@
         return null;
     }
     var projectId = getQueryString('projectId') || '559f57c90c000eee22663be0';
-    $.getJSON('http://120.132.50.71/wxms/show/jsonp?projectId=' + projectId + '&callback=?',
+    $.getJSON('http://10.161.162.229:9898/show/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
                 if (data.success) {
                     pageData = data.model;
                     initTouchStyleApp();
+                    initClickItem();
                 }
             });
+
+    function initClickItem(){
+        $('#touchBoxCt').on('click','.W_item',function(){
+            var $item = $(this);
+            var href = $item.data('href');
+            if(href&&(new RegExp('[a-zA-z]+://[^\s]*','gi').test(href))){
+                window.location.href = href;
+            }
+        });
+    }
 </script>
-<script src="http://image.yihaodianimg.com/mobile-ued/wxms_client/js/wechat.js"></script>
+<script src="js/wechat.js"></script>
 <script>
 
     var touchStyleLoadingEl = document.getElementById('touchStyleLoading');
@@ -598,9 +609,7 @@
 
     initDataSource();
 
-    setTimeout(function () {
-        foo.init();
-    }, 1000);
+    foo.init();
 
 
 </script>

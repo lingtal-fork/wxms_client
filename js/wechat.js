@@ -1,8 +1,6 @@
 var foo = {};
 foo.init = function () {
     this.getConfig();
-    this.renderUI();
-    this.bindUI();
 };
 //白名单验证
 foo.getConfig = function () {
@@ -37,101 +35,6 @@ foo.getConfig = function () {
     });
 };
 
-foo.getActivityId = function (name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]);
-    return null;
-};
-
-foo.bindUI = function () {
-    var that = this;
-
-    // $('body').on('click', '.J_login', function(e) {
-    // 	e.preventDefault();
-    // 	h5tonative.goToNative('yhd://login/', '{"from":"h5"}');
-    // });
-    $('.J_rules_link').on('click', function (event) {
-        event.preventDefault();
-        try {
-            var spmData = spm.getData($(this));
-            spmData.tpa = '7';
-            spmData.tpi = '4';
-            gotracker("2", "defaultButton", null, spmData);
-        } catch (e) {
-            console.log(e);
-        }
-        /* Act on the event */
-        var link = $(this).attr('href'), id = that.getActivityId('activityId'), url = link + '?activityId=' + id;
-        window.location.href = url;
-
-    });
-    $('.J_play_now').on('click', function (e) {
-        e.preventDefault();
-        window.location.href = 'http://m.yhd.com/mw/d';
-    });
-    $('.J_intro_share').on('click', function (e) {
-        e.preventDefault();
-        $('.wechat-share-tips').show();
-
-    });
-    $('body').on('click', '.wechat-share-tips', function (event) {
-        event.preventDefault();
-        /* Act on the event */
-        $(this).hide();
-    });
-
-
-};
-foo.renderUI = function () {
-    var that = this;
-    if (that.isLogin = true) {
-        setTimeout(that.getList, '1000');
-    } else {
-        var noLoginHtml = '<div class="gi-notlogin"><img src="http://image.yihaodianimg.com/mobile-ued/luckMoney/img/list_no_login.png"><p>请登录查看历史活动奖品</p><button class="J_login">马上登录</button></div>'
-        $('.J_render').html(noLoginHtml);
-    }
-
-    $.ajax({
-        url: 'http://m.yhd.com/hot/sogift/getGameRuleDetail.action',
-        type: 'get',
-        dataType: 'json',
-        data: {
-            activityId: foo.getActivityId('activityId')
-        },
-        success: function (data) {
-            if (data.rtn_code == "1") {
-                $('.J_content').html(data.data.content);
-            } else {
-                $('.J_content').html('<p style="text-align:center;">本次活动解释权均归1号店所有。</p>');
-            }
-        }
-    });
-
-
-    $.ajax({
-        url: 'http://m.yhd.com/hot/sogift/getGameNextTime.action',
-        type: 'get',
-        dataType: 'json',
-        data: {
-            activityId: foo.getActivityId('activityId')
-        },
-        success: function (countDown) {
-            if (countDown.rtn_code == 1) {
-
-                var date = countDown.rtn_ext;
-                $('.J_date').html(date);
-                $('.gi-count-down').css('visibility', 'visible');
-            } else {
-
-
-            }
-        }
-    });
-    $('.gi-firstscreen').css('background-image', 'url(http://image.yihaodianimg.com/mobile-ued/luckMoney/img/gi_back.jpg)')
-
-
-};
 
 foo.share = function () {
     $.getJSON('http://120.132.50.71/wxms/getWeiXinShareByProjectId?projectId=' + projectId + '&callback=?',
