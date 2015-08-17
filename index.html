@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>微信传播-预览页</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
@@ -436,6 +436,7 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     var pageData = [];
+    var wxDate = [];
     //根据 url 的名字 获得 值
     function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -444,13 +445,22 @@
         return null;
     }
     var projectId = getQueryString('projectId') || '559f57c90c000eee22663be0';
-    $.getJSON('http://10.161.162.229:9898/show/jsonp?projectId=' + projectId + '&callback=?',
+    $.getJSON('http://120.132.50.71/wxms/show/jsonp?projectId=' + projectId + '&callback=?',
             function (data) {
                 if (data.success) {
                     pageData = data.model;
                     initTouchStyleApp();
                     initClickItem();
                 }
+            });
+
+    $.getJSON('http://120.132.50.71/wxms/getWeiXinShareByProjectId?projectId=' + projectId + '&callback=?',
+            function (data) {
+                if (data.model) {
+                    wxDate = data.model;
+                }
+                var title = wxDate.title || '微信传播';
+                $('title').html(title);
             });
 
     function initClickItem(){

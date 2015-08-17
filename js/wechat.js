@@ -37,36 +37,28 @@ foo.getConfig = function () {
 
 
 foo.share = function () {
-    $.getJSON('http://120.132.50.71/wxms/getWeiXinShareByProjectId?projectId=' + projectId + '&callback=?',
-        function (data) {
-            var json = {};
-            if (data.model.length > 0) {
-                json = data.model[0];
-            }
+    var title = wxDate.title || '微信分享',
+        text = wxDate.desc || '微信分享',
+        picture = wxDate.imgUrl || 'http://d9.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png';
+    foo.shareJson = {
+        "title": title,
+        "text": text,
+        "picture": picture
+    };
+    //that.getConfig();
+    //分享接口调用
+    wx.onMenuShareAppMessage({
+        title: foo.shareJson.title,
+        link: window.location.href,
+        imgUrl: foo.shareJson.picture,
+        desc: foo.shareJson.text
 
-            var title = json.title || '微信分享',
-                text = json.desc || '微信分享',
-                picture = json.imgUrl || 'http://d9.yihaodianimg.com/N02/M02/40/EB/CgQCsFLVBOOAE0boAAAK5UNpfUI56300.png';
-            foo.shareJson = {
-                "title": title,
-                "text": text,
-                "picture": picture
-            };
-            //that.getConfig();
-            //分享接口调用
-            wx.onMenuShareAppMessage({
-                title: foo.shareJson.title,
-                link: window.location.href,
-                imgUrl: foo.shareJson.picture,
-                desc: foo.shareJson.text
-
-            });
-            wx.onMenuShareTimeline({
-                title: foo.shareJson.title,
-                link: window.location.href,
-                imgUrl: foo.shareJson.picture,
-                desc: foo.shareJson.text
-            });
-        });
+    });
+    wx.onMenuShareTimeline({
+        title: foo.shareJson.title,
+        link: window.location.href,
+        imgUrl: foo.shareJson.picture,
+        desc: foo.shareJson.text
+    });
 
 };
