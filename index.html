@@ -355,11 +355,21 @@
                 opacity: 0;
             }
         }
+
+        #car_audio {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            line-height: 0;
+            display: none;
+        }
     </style>
 
 </head>
 <body style="overflow: hidden;">
-
+<audio preload="auto" autoplay id="car_audio" src="" loop></audio>
 <div id="touchStyleLoading" style="background-color:#ffffff;">
     <div class="percent" style="color:#333333;">0</div>
     <div class="spinner"
@@ -372,14 +382,15 @@
         <div id="<%= page._id %>" class="page"
              style="background-color:<%= page.backgroundcolor %>; background-image:url(<%=page.backgroundimage%>); background-size: cover; background-position: 50% 50%;">
             <% page.imgcomList.forEach(function(img){ %>
-            <div id="<%=img._id %>" class="<%=img.animationName %> animated"  data-type="img" style="position: absolute;
+            <div id="<%=img._id %>" class="<%=img.animationName %> animated" data-type="img" style="position: absolute;
             z-index: <%=img.zIndex %>;left: <%=sizeFormat(img.left,allPage.initWidth)%>; right: <%=sizeFormat(img.right,allPage.initWidth) %>; top: <%=sizeFormat(img.top,allPage.initHeight) %>; bottom: <%=sizeFormat(img.bottom,allPage.initHeight) %>;
             width: <%=sizeFormat(img.width,allPage.initWidth) %>; height: <%=sizeFormat(img.height,allPage.initHeight)%>;
             -webkit-animation-duration: <%=img.animationDuration %>; animation-duration: <%=img.animationDuration %>; -webkit-animation-iteration-count: <%=img.animationCount %>;
             animation-iteration-count: <%=img.animationCount %>; animation-delay:<%=img.animationDelay %>; -webkit-animation-delay:<%=img.animationDelay %>;  background-repeat: no-repeat;">
                 <div style="transform:<%=img.transform %>;-webkit-transform:<%=img.transform %>;background-color:transparent;"
                      class="item-image-full">
-                    <img class="W_item" data-href="<%=img.href%>" src="<%=img.imgurl %>" data-dataurl="<%=img.dataurl %>"
+                    <img class="W_item" data-href="<%=img.href%>" src="<%=img.imgurl %>"
+                         data-dataurl="<%=img.dataurl %>"
                          data-datamapping="<%=img.datamapping %>" width="100%" height="100%"
                          style="-webkit-border-radius:<%=img.borderRadius %>;border-radius:<%=img.borderRadius %>; box-shadow:<%=img.boxShadow %>;opacity:<%=img.opacity %>;
                      border-color:<%=img.borderColor %>;border-style:<%=img.borderStyle %>;border-width: <%=img.borderWidth %>;border-radius: <%=img.borderRadius %> ;padding: <%=img.paddingTop %> <%=img.paddingRight %> <%=img.paddingBottom %> <%=img.paddingLeft %>;">
@@ -411,7 +422,7 @@
              -webkit-animation-duration: <%=btn.animationDuration %>; animation-duration: <%=btn.animationDuration %>; -webkit-animation-iteration-count: <%=btn.animationCount %>;
             animation-iteration-count: <%=btn.animationCount %>; animation-delay:<%=btn.animationDelay %>; -webkit-animation-delay:<%=btn.animationDelay %>; background-repeat: no-repeat;">
                 <div class="item-table">
-                    <button type="button"  data-href="<%=btn.href%>"  style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;background-color:<%=btn.backgroundColor %>;
+                    <button type="button" data-href="<%=btn.href%>" style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;background-color:<%=btn.backgroundColor %>;
                  border-color:<%=btn.borderColor %>;border-style:<%=btn.borderStyle %>;border-width: <%=btn.borderWidth %>;border-radius: <%=btn.borderRadius %> ;
                  box-shadow:<%=btn.boxShadow %> ; text-shadow:<%=btn.textShadow %> ; color:  <%=btn.color %>;font-style: <%=btn.fontStyle %>; font-weight: <%=btn.fontWeight %>;
                  font-family: <%=btn.fontFamily %>; font-size: <%=btn.fontSize %>;  text-align: <%=btn.textAlign%>; line-height:<%=btn.lineHeight%>;"
@@ -463,15 +474,41 @@
                 $('title').html(title);
             });
 
-    function initClickItem(){
-        $('#touchBoxCt').on('click','.W_item',function(){
+    function initClickItem() {
+        $('#touchBoxCt').on('click', '.W_item', function () {
             var $item = $(this);
             var href = $item.data('href');
-            if(href&&(new RegExp('[a-zA-z]+://[^\s]*','gi').test(href))){
+            if (href && (new RegExp('[a-zA-z]+://[^\s]*', 'gi').test(href))) {
                 window.location.href = href;
             }
         });
     }
+
+
+    /*音乐*/
+    var audio = $('#car_audio');
+    var isPlaying = false;
+    function playAudio() {
+        var audio = $('#car_audio');
+        $.getJSON('http://120.132.50.71/wxms/getAudiocomByprojectId/jsonp?projectId=' + projectId + '&callback=?',
+                function (data) {
+                    var src = 'http://mxc.yhd.com/mainVenue/sound/music.mp3';
+                    if (data.model) {
+                        src = data.model.audiourl;
+                        audio.attr('src',src);
+                        audio[0].play();
+                        isPlaying = true;
+                    }
+                });
+    }
+    $(function () {
+        playAudio();
+        document.addEventListener("WeixinJSBridgeReady", function () {
+            WeixinJSBridge.invoke('getNetworkType', {}, function (e) {
+                playAudio();
+            });
+        }, false);
+    });
 </script>
 <script src="js/wechat.js"></script>
 <script>
@@ -486,12 +523,12 @@
 
     function initTouchStyleApp() {
         var len = pageData.length;
-        if(len>0){
+        if (len > 0) {
             pageData.initWidth = 320;
             pageData.initHeight = 504;
 
-            template.helper('sizeFormat', function (oldSize,size) {
-                return (parseInt(oldSize,10)/size)*100+'%';
+            template.helper('sizeFormat', function (oldSize, size) {
+                return (parseInt(oldSize, 10) / size) * 100 + '%';
             });
 
 
@@ -500,16 +537,10 @@
         }
 
 
-
         var boxer = new TouchBox('#touchBoxCt', {
             loop: false,//len >= 3 ? true: false,
             animation: 'slide'
         });
-
-
-
-
-
 
 
         boxer.on('slide', function (activeIndex, oldIndex) {
