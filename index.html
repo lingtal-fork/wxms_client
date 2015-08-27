@@ -365,11 +365,28 @@
             line-height: 0;
             display: none;
         }
+
+        #J_music{
+            position: fixed;
+            display: none;
+            background-image: url(images/music.png);
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #F5EEEE;
+            z-index: 999;
+            background-repeat: no-repeat;
+            background-size: 26px 26px;
+            background-position: 5px center;
+            right: 20px;
+            top: 20px;
+        }
     </style>
 
 </head>
 <body style="overflow: hidden;">
 <audio preload="auto" autoplay id="car_audio" src="" loop></audio>
+<div id="J_music" class="animated infinite"></div>
 <div id="touchStyleLoading" style="background-color:#ffffff;">
     <div class="percent" style="color:#333333;">0</div>
     <div class="spinner"
@@ -448,6 +465,7 @@
 <script>
     var pageData = [];
     var wxDate = [];
+    var J_music = $('#J_music');
     //根据 url 的名字 获得 值
     function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -497,10 +515,22 @@
                         src = data.model.audiourl;
                         audio.attr('src',src);
                         audio[0].play();
+                        J_music.show().addClass('circleRotate');
                         isPlaying = true;
                     }
                 });
     }
+
+    J_music.on('click',function(){
+        if(J_music.hasClass('circleRotate')){
+            J_music.removeClass('circleRotate');
+            audio[0].pause();
+        }else{
+            J_music.addClass('circleRotate');
+            audio[0].play();
+        }
+    });
+
     $(function () {
         playAudio();
         document.addEventListener("WeixinJSBridgeReady", function () {
