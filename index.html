@@ -438,8 +438,8 @@
                  style="position: absolute;width: <%=sizeFormat(btn.width,allPage.initWidth) %>; height: <%=sizeFormat(btn.height,allPage.initHeight) %>;z-index: <%=btn.zIndex %>;left: <%=sizeFormat(btn.left,allPage.initWidth) %>; right: <%=sizeFormat(btn.right,allPage.initWidth) %>; top: <%=sizeFormat(btn.top,allPage.initHeight) %>; bottom: <%=sizeFormat(btn.bottom,allPage.initHeight) %>;
              -webkit-animation-duration: <%=btn.animationDuration %>; animation-duration: <%=btn.animationDuration %>; -webkit-animation-iteration-count: <%=btn.animationCount %>;
             animation-iteration-count: <%=btn.animationCount %>; animation-delay:<%=btn.animationDelay %>; -webkit-animation-delay:<%=btn.animationDelay %>; background-repeat: no-repeat;">
-                <div class="item-table">
-                    <button type="button" data-href="<%=btn.href%>" style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;background-color:<%=btn.backgroundColor %>;
+                <div class="item-table" style="transform:<%=btn.transform %>;-webkit-transform:<%=btn.transform %>;">
+                    <button type="button" data-href="<%=btn.href%>" style="background-color:<%=btn.backgroundColor %>;
                  border-color:<%=btn.borderColor %>;border-style:<%=btn.borderStyle %>;border-width: <%=btn.borderWidth %>;border-radius: <%=btn.borderRadius %> ;
                  box-shadow:<%=btn.boxShadow %> ; text-shadow:<%=btn.textShadow %> ; color:  <%=btn.color %>;font-style: <%=btn.fontStyle %>; font-weight: <%=btn.fontWeight %>;
                  font-family: <%=btn.fontFamily %>; font-size: <%=btn.fontSize %>;  text-align: <%=btn.textAlign%>; line-height:<%=btn.lineHeight%>;"
